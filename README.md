@@ -26,7 +26,7 @@ Runs [moondream2](https://github.com/vikhyatk/moondream) (0.5B params) locally o
 ```bash
 mkdir -p ~/.pi/agent
 cd ~/.pi/agent
-git clone https://github.com/jonathanmartins/deepseek-vision.git
+git clone https://github.com/JonRoosevelt/deepseek-vision.git
 ```
 
 ### 2. Set up the Python environment
