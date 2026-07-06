@@ -1,0 +1,8 @@
+torch>=2.0
+transformers>=4.45
+einops
+accelerate
+Pillow
+fastapi
+uvicorn
+pydantic
