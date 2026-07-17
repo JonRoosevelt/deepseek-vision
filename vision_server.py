@@ -130,6 +130,9 @@ def _check_memory_pressure():
 def load_model():
     global model, tokenizer
     logger.info(f"Loading {MODEL_ID} on {DEVICE}...")
+    # trust_remote_code=True required: moondream2 ships a custom model
+    # definition. Source is vikhyatk/moondream2 (official author) on
+    # HuggingFace — reviewed and widely used. Pin to this exact repo.
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
         trust_remote_code=True,
