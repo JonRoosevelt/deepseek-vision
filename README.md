@@ -2,7 +2,7 @@
 
 Lightweight VLM service that adds image understanding to [pi](https://github.com/earendil-works/pi-coding-agent) when using DeepSeek (which lacks a vision API).
 
-Runs [moondream2](https://github.com/vikhyatk/moondream) (0.5B params) locally on Apple Silicon MPS. Given a pasted image, it describes the contents so DeepSeek can "see" what you're showing it.
+Runs [moondream2](https://github.com/vikhyatk/moondream) (~1.8B params) locally on Apple Silicon MPS. Given a pasted image, it describes the contents so DeepSeek can "see" what you're showing it.
 
 ## How it works
 
@@ -67,7 +67,7 @@ Check health:
 
 ```bash
 curl http://127.0.0.1:8901/health
-# {"status":"ok","model":"vikhyatk/moondream2","device":"mps"}
+# {"status":"ok","model":"vikhyatk/moondream2","device":"mps","stats":{...}}
 ```
 
 Send an image for description:
@@ -87,6 +87,20 @@ curl -X POST http://127.0.0.1:8901/v1/chat/completions \
   }'
 ```
 
+## Features
+
+- **Embedding cache**: reuses `encode_image()` results for the same image across
+  multi-turn conversations. Cuts follow-up latency from ~2s to ~300ms.
+- **Structured VQA**: prefix `[structured]` in the prompt to get JSON output with
+  bounding boxes, OCR text, and spatial layout.
+- **Multi-image**: processes all images in a single message, returning combined
+  results (up to 10).
+- **Memory management**: auto-evicts cache entries under pressure. Forces MPS
+  cache clearing and garbage collection between images to prevent leaks.
+- **Object detection**: `/v1/detect` endpoint returns bounding boxes and center
+  points for named objects.
+- **Cache control**: `/v1/cache/clear` flushes the embedding cache.
+
 ## Commands
 
 In pi, type `/vision-status` to check if the server is running.
@@ -95,5 +109,5 @@ In pi, type `/vision-status` to check if the server is running.
 
 - macOS with Apple Silicon (M1/M2/M3/M4)
 - Python 3.10+
-- ~1GB disk space (model download)
-- ~2GB RAM during inference
+- ~8 GB disk space (model download)
+- ~8 GB RAM during model load; ~500 MB steady state per active session
