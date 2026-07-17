@@ -6,12 +6,10 @@ Runs [moondream2](https://github.com/vikhyatk/moondream) (~1.8B params) locally 
 
 ## How it works
 
-```
-┌──────────┐     image      ┌─────────────────┐    description     ┌──────────┐
-│  pi TUI  │ ────────────── │  Vision Bridge   │ ────────────────  │ DeepSeek │
-│ (paste)  │                │  (moondream2)    │                   │   V4 Pro │
-└──────────┘                └─────────────────┘                   └──────────┘
-                                  127.0.0.1:8901
+```mermaid
+graph LR
+    A[pi TUI<br/>paste image] -->|image| B[Vision Bridge<br/>moondream2<br/>127.0.0.1:8901]
+    B -->|description| C[DeepSeek<br/>V4 Pro]
 ```
 
 1. You paste/read an image in pi
